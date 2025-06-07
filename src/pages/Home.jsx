@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Home = () => {
   const services = [
     { id: 1, title: "Servicio 1" },
@@ -13,9 +15,12 @@ const Home = () => {
             Solicita tu pedido
             <br className="hidden md:block" /> ahora
           </h1>
-          <button className="px-8 py-3 bg-[var(--orange-main)] hover:bg-orange-600 transition text-white font-semibold rounded-md shadow-lg">
+          <Link
+            to="/solicitar-pedido"
+            className="px-8 py-3 bg-[var(--orange-main)] hover:bg-orange-600 transition text-white font-semibold rounded-md shadow-lg"
+          >
             SOLICITA AHORA
-          </button>
+          </Link>
         </div>
       </div>
 

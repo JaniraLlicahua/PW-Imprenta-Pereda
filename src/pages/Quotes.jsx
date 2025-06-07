@@ -107,8 +107,13 @@ const Cotizaciones = () => {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium">Archivo</label>
-            <input type="file" className="w-full" />
+            <label
+              htmlFor="file-upload"
+              className="cursor-pointer border border-[var(--gray-main)] py-2 px-3 rounded-lg bg-gray-100 inline-block"
+            >
+              Seleccionar archivo
+            </label>
+            <input id="file-upload" type="file" className="hidden" />
           </div>
 
           <button

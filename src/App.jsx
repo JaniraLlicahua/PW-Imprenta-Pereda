@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Quotes from "./pages/Quotes";
 import Contact from "./pages/Contact";
+import RequestOrder from "./pages/RequestOrder";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/solicitar-pedido" element={<RequestOrder />} />
         <Route path="/servicios" element={<Services />} />
         <Route path="/cotizaciones" element={<Quotes />} />
         <Route path="/contacto" element={<Contact />} />
