@@ -10,6 +10,7 @@ import Contact from "./pages/Contact";
 import RequestOrder from "./pages/RequestOrder";
 import Inventory from "./pages/Inventory";
 import OrderTracking from "./pages/OrderTracking";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/admin" element={<Dashboard />} />
         <Route path="/admin/inventario" element={<Inventory />} />
         <Route path="/seguimiento-pedido" element={<OrderTracking />} />
         <Route path="/solicitar-pedido" element={<RequestOrder />} />
