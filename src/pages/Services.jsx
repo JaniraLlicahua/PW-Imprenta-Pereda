@@ -10,7 +10,7 @@ const Services = () => {
   const services = [
     {
       image: service1,
-      title: "Impresión offset",
+      title: "Impresión digital",
     },
     {
       image: service2,
@@ -18,11 +18,11 @@ const Services = () => {
     },
     {
       image: service3,
-      title: "Impresión offset",
+      title: "Material publicitario",
     },
     {
       image: service4,
-      title: "Impresión offset",
+      title: "Tarjetas presentación",
     },
   ];
 
