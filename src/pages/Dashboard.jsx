@@ -11,7 +11,7 @@ const Dashboard = () => {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className="bg-[#0a2048] text-white w-48 p-4 space-y-6">
+      <aside className="bg-[var(--blue-main)] text-white w-48 p-4 space-y-6">
         <h2 className="text-xl font-bold mb-8">ADMIN</h2>
         <nav className="space-y-4">
           <div className="flex items-center gap-2">
@@ -31,7 +31,9 @@ const Dashboard = () => {
 
       {/* Main dashboard */}
       <main className="flex-1 bg-gray-50 p-6">
-        <h1 className="text-2xl font-bold text-[#0a2048] mb-6">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-[var(--blue-main)] mb-6">
+          Dashboard
+        </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Pedidos por día */}
@@ -45,7 +47,7 @@ const Dashboard = () => {
           </div>
 
           {/* Alerta de stock */}
-          <div className="bg-orange-100 text-orange-700 p-4 rounded shadow flex items-center gap-2">
+          <div className="bg-orange-100 text-[var(--orange-main)] p-4 rounded shadow flex items-center gap-2">
             <FaExclamationTriangle className="text-xl" />
             <span className="font-semibold">Alerta de stock mínimo</span>
           </div>
