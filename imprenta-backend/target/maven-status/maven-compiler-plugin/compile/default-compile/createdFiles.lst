@@ -1,0 +1,4 @@
+com\imprenta\backend\controlador\ClienteController.class
+com\imprenta\backend\App.class
+com\imprenta\backend\modelo\Cliente.class
+com\imprenta\backend\repositorio\ClienteRepository.class
