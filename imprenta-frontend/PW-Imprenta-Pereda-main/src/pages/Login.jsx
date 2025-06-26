@@ -1,52 +1,73 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+const navigate = useNavigate();
 
 const Login = () => {
+  const [correo, setCorreo] = useState("");
+  const [contraseña, setContraseña] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!correo || !contraseña) {
+      alert("Por favor completa todos los campos");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8081/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ correo, contraseña })
+      });
+
+      const message = await response.text();
+
+      if (message.includes("exitoso")) {
+        alert("✅ Inicio de sesión exitoso");
+        navigate("/dashboard"); // ← aquí redirigimos
+      } else {
+        alert("❌ " + message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("❌ Error al intentar iniciar sesión");
+    }
+  };
+
   return (
-    <div className="h-screen bg-[var(--blue-main)] text-white flex">
-      <div className=" max-w-96 m-auto flex flex-col items-center space-y-6">
-        <h1 className=" capitalize font-bold text-4xl text-center mb-6">
-          Iniciar Sesión
-        </h1>
-        <div className="bg-[var(--gray-main)] p-4 rounded-xl w-[360px] shadow-2xl">
-          <form className=" space-y-4">
-            <div className="flex flex-col space-y-1">
-              <label
-                htmlFor="email"
-                className="text-[var(--blue-main)] font-bold"
-              >
-                Correo Electrónico
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className="border-2 border-[var(--gray-main)] bg-white rounded-lg p-1 text-black outline-none"
-              />
-            </div>
-            <div className="flex flex-col space-y-1">
-              <label
-                htmlFor="password"
-                className="text-[var(--blue-main)] font-bold"
-              >
-                Contraseña
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                className="border-2 border-[var(--gray-main)] bg-white rounded-lg p-1 text-black outline-none"
-              />
-            </div>
-            <div className="flex justify-center">
-              <button className="uppercase bg-[var(--orange-main)] rounded-xl py-2 px-4">
-                iniciar sesión
-              </button>
-            </div>
-          </form>
-        </div>
-        <Link to="/registrar">
-          ¿No tienes cuenta? <span className="underline">Regístrate</span>
-        </Link>
+    <div className="h-screen flex items-center justify-center bg-[var(--blue-main)] text-white">
+      <div className="bg-[var(--gray-main)] p-8 rounded-lg shadow-xl w-96">
+        <h1 className="text-3xl font-bold text-center mb-6">Iniciar Sesión</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block mb-1 text-[var(--blue-main)] font-bold">Correo</label>
+            <input
+              type="email"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              className="w-full p-2 rounded text-black"
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-[var(--blue-main)] font-bold">Contraseña</label>
+            <input
+              type="password"
+              value={contraseña}
+              onChange={(e) => setContraseña(e.target.value)}
+              className="w-full p-2 rounded text-black"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-[var(--orange-main)] py-2 rounded hover:bg-orange-600"
+          >
+            Iniciar Sesión
+          </button>
+        </form>
       </div>
     </div>
   );

@@ -15,16 +15,18 @@ public class Cliente {
     private String apellido;
     private String telefono;
     private String correo;
+    private String contraseña;
 
     // Constructores
     public Cliente() {
     }
 
-    public Cliente(String nombre, String apellido, String telefono, String correo) {
+    public Cliente(String nombre, String apellido, String telefono, String correo, String contraseña) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.correo = correo;
+        this.contraseña = contraseña;
     }
 
     // Getters y Setters
@@ -62,5 +64,12 @@ public class Cliente {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String contrasena) {
+        this.contraseña = contrasena;
     }
 }

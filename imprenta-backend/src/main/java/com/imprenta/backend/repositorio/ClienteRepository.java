@@ -4,8 +4,9 @@ package com.imprenta.backend.repositorio;
 import com.imprenta.backend.modelo.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-    // No necesitas escribir métodos aquí por ahora, JPA lo hace por ti
+    List<Cliente> findByCorreo(String correo);
 }

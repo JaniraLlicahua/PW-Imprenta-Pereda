@@ -1,67 +1,91 @@
-const RequestOrder = () => {
-  return (
-    <div>
-      <h1 className="text-4xl font-bold mt-8 text-center text-[var(--blue-main)]">
-        Solicitar Pedido
-      </h1>
-      <div className="bg-opacity-70 p-6 rounded-lg max-w-md mx-auto shadow-md backdrop-blur-sm my-8">
-        <form className="flex flex-col space-y-4">
-          <div>
-            <label className="block text-[var(--blue-main)] font-semibold mb-1">
-              Tipo de impresión
-            </label>
-            <select className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none">
-              <option disabled selected>
-                an option
-              </option>
-              <option value="digital">Digital</option>
-              <option value="offset">Offset</option>
-              {/* Puedes agregar más opciones aquí */}
-            </select>
-          </div>
+import { useState } from "react";
 
+const RequestOrder = () => {
+  const [descripcion, setDescripcion] = useState("");
+  const [fechaEntrega, setFechaEntrega] = useState("");
+  const [estado] = useState("Pendiente"); // estado fijo por ahora
+  const [pedidos, setPedidos] = useState([]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!descripcion || !fechaEntrega) {
+      alert("Por favor completa todos los campos.");
+      return;
+    }
+
+    const pedido = { descripcion, estado, fechaEntrega };
+
+    try {
+      const response = await fetch("http://localhost:8081/api/pedidos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(pedido)
+      });
+
+      if (!response.ok) throw new Error("Error al registrar el pedido");
+
+      const data = await response.json();
+
+      setPedidos([...pedidos, data]);
+      setDescripcion("");
+      setFechaEntrega("");
+      alert("✅ Pedido registrado con éxito");
+
+    } catch (error) {
+      console.error(error);
+      alert("❌ No se pudo registrar el pedido");
+    }
+  };
+
+  return (
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-semibold mb-4">Registrar nuevo pedido</h2>
+
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-[var(--blue-main)] font-semibold mb-1">
-              Material
+            <label className="block mb-1 text-sm font-medium">
+              Descripción del pedido
             </label>
             <input
               type="text"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none"
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+              className="w-full border border-gray-300 p-2 rounded"
             />
           </div>
 
           <div>
-            <label className="block text-[var(--blue-main)] font-semibold mb-1">
-              Cantidad
-            </label>
+            <label className="block mb-1 text-sm font-medium">Fecha de entrega</label>
             <input
-              type="number"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none"
+              type="date"
+              value={fechaEntrega}
+              onChange={(e) => setFechaEntrega(e.target.value)}
+              className="w-full border border-gray-300 p-2 rounded"
             />
-          </div>
-
-          <div>
-            <label className="block text-[var(--blue-main)] font-semibold mb-1">
-              Adjuntar archivos (opcional)
-            </label>
-            <div>
-              <label
-                htmlFor="file-upload"
-                className="cursor-pointer w-full text-center border border-[var(--gray-main)] py-2 px-3 rounded-lg bg-gray-100 inline-block"
-              >
-                Seleccionar archivo
-              </label>
-              <input id="file-upload" type="file" className="hidden" />
-            </div>
           </div>
 
           <button
             type="submit"
-            className="bg-[var(--orange-main)] text-white font-bold py-2 rounded transition duration-300"
+            className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
           >
-            ENVIAR SOLICITUD
+            Enviar pedido
           </button>
         </form>
+
+        {pedidos.length > 0 && (
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold mb-2">Pedidos registrados</h3>
+            <ul className="list-disc pl-5">
+              {pedidos.map((p, i) => (
+                <li key={i}>{p.descripcion} - Entrega: {p.fechaEntrega}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,11 @@
 C:\Users\Usuario\ImprentaProyecto\imprenta-backend\src\main\java\com\imprenta\backend\controlador\CotizacionController.java
 C:\Users\Usuario\ImprentaProyecto\imprenta-backend\src\main\java\com\imprenta\backend\controlador\ClienteController.java
 C:\Users\Usuario\ImprentaProyecto\imprenta-backend\src\main\java\com\imprenta\backend\repositorio\CotizacionRepository.java
+C:\Users\Usuario\ImprentaProyecto\imprenta-backend\src\main\java\com\imprenta\backend\controlador\PedidoController.java
 C:\Users\Usuario\ImprentaProyecto\imprenta-backend\src\main\java\com\imprenta\backend\repositorio\ClienteRepository.java
+C:\Users\Usuario\ImprentaProyecto\imprenta-backend\src\main\java\com\imprenta\backend\repositorio\PedidoRepository.java
 C:\Users\Usuario\ImprentaProyecto\imprenta-backend\src\main\java\com\imprenta\backend\App.java
+C:\Users\Usuario\ImprentaProyecto\imprenta-backend\src\main\java\com\imprenta\backend\modelo\Pedido.java
 C:\Users\Usuario\ImprentaProyecto\imprenta-backend\src\main\java\com\imprenta\backend\modelo\Cliente.java
+C:\Users\Usuario\ImprentaProyecto\imprenta-backend\src\main\java\com\imprenta\backend\controlador\AuthController.java
 C:\Users\Usuario\ImprentaProyecto\imprenta-backend\src\main\java\com\imprenta\backend\modelo\Cotizacion.java
