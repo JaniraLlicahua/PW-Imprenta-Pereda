@@ -20,8 +20,8 @@ public class PedidoController {
         return pedidoRepository.save(pedido);
     }
 
-    @GetMapping
-    public List<Pedido> obtenerPedidos() {
-        return pedidoRepository.findAll();
+    @GetMapping("/cliente/{clienteId}")
+    public List<Pedido> obtenerPorCliente(@PathVariable Long clienteId) {
+        return pedidoRepository.findByClienteId(clienteId);
     }
 }

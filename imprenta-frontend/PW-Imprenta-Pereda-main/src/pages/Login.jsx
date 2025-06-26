@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const navigate = useNavigate();
 
 const Login = () => {
   const [correo, setCorreo] = useState("");
   const [contraseña, setContraseña] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,19 +17,25 @@ const Login = () => {
     try {
       const response = await fetch("http://localhost:8081/api/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ correo, contraseña })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ correo, contraseña: contraseña })
       });
 
-      const message = await response.text();
+      if (!response.ok) {
+        const errorText = await response.text();
+        alert("❌ " + errorText);
+        return;
+      }
 
-      if (message.includes("exitoso")) {
-        alert("✅ Inicio de sesión exitoso");
-        navigate("/dashboard"); // ← aquí redirigimos
+      const data = await response.json();
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("rol", data.rol);
+      localStorage.setItem("clienteId", data.clienteId); // lo usamos para pedidos
+
+      if (data.rol === "admin") {
+        navigate("/admin");
       } else {
-        alert("❌ " + message);
+        navigate("/ordertracking");
       }
     } catch (error) {
       console.error(error);

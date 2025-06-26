@@ -5,7 +5,8 @@ const Register = () => {
   const [form, setForm] = useState({
     nombre: "",
     empresa: "",
-    correo: ""
+    correo: "",
+    contraseña: ""
   });
 
   const handleChange = (e) => {
@@ -17,9 +18,11 @@ const Register = () => {
 
     const cliente = {
       nombre: form.nombre,
-      apellido: form.empresa, // usamos empresa como apellido (ajustamos si se desea separar)
-      telefono: "000000000",  // temporal, no hay campo aún
-      correo: form.correo
+      apellido: form.empresa,
+      telefono: "000000000",  // Puedes pedirlo más adelante
+      correo: form.correo,
+      contraseña: form.contraseña,
+      rol: "cliente"
     };
 
     try {
@@ -31,7 +34,7 @@ const Register = () => {
 
       if (!res.ok) throw new Error("Error al registrar cliente");
       alert("✅ Cliente registrado con éxito");
-      setForm({ nombre: "", empresa: "", correo: "" });
+      setForm({ nombre: "", empresa: "", correo: "", contraseña: "" });
     } catch (err) {
       alert("❌ Error al registrar cliente");
       console.error(err);
@@ -56,6 +59,10 @@ const Register = () => {
               <label htmlFor="correo" className="text-[var(--blue-main)] font-bold">Correo Electrónico</label>
               <input type="email" id="correo" name="correo" value={form.correo} onChange={handleChange} className="border-2 bg-white rounded-lg p-1 text-black outline-none" required />
             </div>
+            <div className="flex flex-col space-y-1">
+              <label htmlFor="contrasena" className="text-[var(--blue-main)] font-bold">Contraseña</label>
+              <input type="password" id="contraseña" name="contraseña" value={form.contraseña} onChange={handleChange} className="border-2 bg-white rounded-lg p-1 text-black outline-none" required />
+            </div>
             <div className="flex justify-center">
               <button type="submit" className="uppercase bg-[var(--orange-main)] rounded-xl py-2 px-4">Registrar</button>
             </div>
@@ -70,4 +77,3 @@ const Register = () => {
 };
 
 export default Register;
-

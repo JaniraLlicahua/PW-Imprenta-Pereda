@@ -9,6 +9,7 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long clienteId;
 
     private String descripcion;
     private String estado;
@@ -16,10 +17,11 @@ public class Pedido {
 
     public Pedido() {}
 
-    public Pedido(String descripcion, String estado, String fechaEntrega) {
+    public Pedido(String descripcion, String estado, String fechaEntrega, Long clienteId) {
         this.descripcion = descripcion;
         this.estado = estado;
         this.fechaEntrega = fechaEntrega;
+        this.clienteId = clienteId;
     }
 
     // Getters y setters
@@ -49,5 +51,12 @@ public class Pedido {
 
     public void setFechaEntrega(String fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
+    }
+    public Long getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
     }
 }

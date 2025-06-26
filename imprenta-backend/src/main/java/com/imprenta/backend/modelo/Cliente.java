@@ -16,17 +16,19 @@ public class Cliente {
     private String telefono;
     private String correo;
     private String contraseña;
+    private String rol = "cliente";
 
     // Constructores
     public Cliente() {
     }
 
-    public Cliente(String nombre, String apellido, String telefono, String correo, String contraseña) {
+    public Cliente(String nombre, String apellido, String telefono, String correo, String contraseña, String rol) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.correo = correo;
         this.contraseña = contraseña;
+        this.rol = rol; 
     }
 
     // Getters y Setters
@@ -69,7 +71,15 @@ public class Cliente {
         return contraseña;
     }
 
-    public void setContraseña(String contrasena) {
-        this.contraseña = contrasena;
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }

@@ -11,6 +11,7 @@ import RequestOrder from "./pages/RequestOrder";
 import Inventory from "./pages/Inventory";
 import OrderTracking from "./pages/OrderTracking";
 import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<Dashboard />} />
+        <Route path="/admin"element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/admin/inventario" element={<Inventory />} />
         <Route path="/seguimiento-pedido" element={<OrderTracking />} />
         <Route path="/solicitar-pedido" element={<RequestOrder />} />
