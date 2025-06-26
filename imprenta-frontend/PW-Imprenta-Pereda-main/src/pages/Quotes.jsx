@@ -7,22 +7,50 @@ const Cotizaciones = () => {
   const [descripcion, setDescripcion] = useState("");
   const [cantidad, setCantidad] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!tipo || !descripcion || !cantidad) return;
+  if (!tipo || !descripcion || !cantidad) {
+    alert("Por favor completa todos los campos.");
+    return;
+  }
+
+  const cotizacion = {
+    descripcion: `${tipo.toUpperCase()} - ${descripcion} (x${cantidad})`,
+    precioEstimado: 0
+  };
+
+  try {
+    const response = await fetch("http://localhost:8081/api/cotizaciones", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(cotizacion)
+    });
+
+    if (!response.ok) throw new Error("No se pudo registrar la cotización");
+
+    const data = await response.json();
 
     const nuevaCotizacion = {
       fecha: new Date().toLocaleDateString("es-PE"),
-      descripcion,
-      estado: "Enviado",
+      descripcion: data.descripcion,
+      estado: "Enviado"
     };
 
     setCotizaciones([...cotizaciones, nuevaCotizacion]);
     setTipo("");
     setDescripcion("");
     setCantidad("");
-  };
+
+    alert("✅ Cotización registrada con éxito");
+
+  } catch (error) {
+    alert("❌ Error al enviar la cotización");
+    console.error(error);
+  }
+};
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
