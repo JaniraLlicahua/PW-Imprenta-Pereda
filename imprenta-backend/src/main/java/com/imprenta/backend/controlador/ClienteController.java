@@ -31,6 +31,39 @@ public class ClienteController {
         return clienteRepository.findAll();
     }
 
+    // Obtener cliente por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Cliente> obtenerCliente(@PathVariable Long id) {
+        return clienteRepository.findById(id)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Editar cliente
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editarCliente(@PathVariable Long id, @RequestBody Cliente clienteEditado) {
+        Cliente cliente = clienteRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
+        cliente.setNombre(clienteEditado.getNombre());
+        cliente.setApellido(clienteEditado.getApellido());
+        cliente.setCorreo(clienteEditado.getCorreo());
+        cliente.setDireccion(clienteEditado.getDireccion());
+        cliente.setDniRuc(clienteEditado.getDniRuc());
+        cliente.setTelefono(clienteEditado.getTelefono());
+        cliente.setRol(clienteEditado.getRol());
+
+        clienteRepository.save(cliente);
+        return ResponseEntity.ok("Cliente actualizado");
+    }
+
+    // Eliminar cliente
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarCliente(@PathVariable Long id) {
+        clienteRepository.deleteById(id);
+        return ResponseEntity.ok("Cliente eliminado");
+    }
+
     // POST → /api/clientes (registrar cliente con contraseña encriptada)
     @PostMapping
     public Cliente guardarCliente(@RequestBody Cliente cliente) {

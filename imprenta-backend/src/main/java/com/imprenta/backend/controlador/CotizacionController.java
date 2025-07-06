@@ -5,6 +5,7 @@ import com.imprenta.backend.modelo.Cotizacion;
 import com.imprenta.backend.repositorio.ClienteRepository;
 import com.imprenta.backend.repositorio.CotizacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,6 +57,23 @@ public class CotizacionController {
     @GetMapping("/cliente/{clienteId}")
     public List<Cotizacion> obtenerPorCliente(@PathVariable Long clienteId) {
         return cotizacionRepository.findByCliente_Id(clienteId);
+    }
+
+    // Obtener una cotización por ID
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editarCotizacion(@PathVariable Long id, @RequestBody Map<String, Object> payload) {
+        Cotizacion cot = cotizacionRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Cotización no encontrada"));
+
+        if (!"Pendiente".equalsIgnoreCase(cot.getEstado())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Solo se pueden editar cotizaciones pendientes.");
+        }
+
+        cot.setDescripcion(payload.get("descripcion").toString());
+        cot.setPrecioEstimado(Double.parseDouble(payload.get("precioEstimado").toString()));
+
+        cotizacionRepository.save(cot);
+        return ResponseEntity.ok("Cotización actualizada");
     }
 
     // Actualizar una cotización

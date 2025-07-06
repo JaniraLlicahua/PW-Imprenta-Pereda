@@ -13,13 +13,15 @@ public class Producto {
     private String nombre;
     private String descripcion;
     private int stock;
+    private double precio;
 
     public Producto() {}
 
-    public Producto(String nombre, String descripcion, int stock) {
+    public Producto(String nombre, String descripcion, int stock, double precio) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.stock = stock;
+        this.precio = precio;
     }
 
     // Getters y setters
@@ -49,5 +51,13 @@ public class Producto {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 }
