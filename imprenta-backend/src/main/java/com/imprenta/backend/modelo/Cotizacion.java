@@ -1,6 +1,7 @@
 package com.imprenta.backend.modelo;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "cotizacion")
@@ -11,18 +12,23 @@ public class Cotizacion {
     private Long id;
 
     private String descripcion;
+
+    @Column(name = "precio_estimado")
     private double precioEstimado;
 
-    // Constructor vacío
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cotizaciones"})
+    private Cliente cliente;
+
     public Cotizacion() {}
 
-    // Constructor con parámetros
-    public Cotizacion(String descripcion, double precioEstimado) {
+    public Cotizacion(String descripcion, double precioEstimado, Cliente cliente) {
         this.descripcion = descripcion;
         this.precioEstimado = precioEstimado;
+        this.cliente = cliente;
     }
 
-    // Getters y setters
     public Long getId() {
         return id;
     }
@@ -41,5 +47,13 @@ public class Cotizacion {
 
     public void setPrecioEstimado(double precioEstimado) {
         this.precioEstimado = precioEstimado;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

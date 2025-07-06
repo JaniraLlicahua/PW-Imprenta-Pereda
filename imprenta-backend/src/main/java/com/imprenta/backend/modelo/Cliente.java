@@ -10,7 +10,7 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private Long clienteId;
     private String nombre;
     private String apellido;
     private String telefono;
@@ -22,13 +22,14 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(String nombre, String apellido, String telefono, String correo, String contraseña, String rol) {
+    public Cliente(String nombre, String apellido, String telefono, String correo, String contraseña, String rol, Long clienteId) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.correo = correo;
         this.contraseña = contraseña;
         this.rol = rol; 
+        this.clienteId = clienteId;
     }
 
     // Getters y Setters
@@ -81,5 +82,13 @@ public class Cliente {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public Long getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
     }
 }

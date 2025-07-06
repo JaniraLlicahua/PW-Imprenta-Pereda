@@ -3,18 +3,26 @@ import { useState } from "react";
 const RequestOrder = () => {
   const [descripcion, setDescripcion] = useState("");
   const [fechaEntrega, setFechaEntrega] = useState("");
-  const [estado] = useState("Pendiente"); // estado fijo por ahora
+  const [estado] = useState("Pendiente");  // Estado fijo, por ahora
   const [pedidos, setPedidos] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const clienteId = localStorage.getItem("clienteId");
+    if (!clienteId) {
+      alert("Debes iniciar sesión para registrar un pedido.");
+      return;
+    }
 
     if (!descripcion || !fechaEntrega) {
       alert("Por favor completa todos los campos.");
       return;
     }
 
-    const pedido = { descripcion, estado, fechaEntrega };
+    const pedido = {
+      descripcion, estado, fechaEntrega, cliente: { id: Number(clienteId) }  // Envía el cliente correctamente
+    };
 
     try {
       const response = await fetch("http://localhost:8081/api/pedidos", {
@@ -47,14 +55,13 @@ const RequestOrder = () => {
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block mb-1 text-sm font-medium">
-              Descripción del pedido
-            </label>
+            <label className="block mb-1 text-sm font-medium">Descripción del pedido</label>
             <input
               type="text"
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
               className="w-full border border-gray-300 p-2 rounded"
+              required
             />
           </div>
 
@@ -65,6 +72,7 @@ const RequestOrder = () => {
               value={fechaEntrega}
               onChange={(e) => setFechaEntrega(e.target.value)}
               className="w-full border border-gray-300 p-2 rounded"
+              required
             />
           </div>
 
@@ -75,17 +83,6 @@ const RequestOrder = () => {
             Enviar pedido
           </button>
         </form>
-
-        {pedidos.length > 0 && (
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-2">Pedidos registrados</h3>
-            <ul className="list-disc pl-5">
-              {pedidos.map((p, i) => (
-                <li key={i}>{p.descripcion} - Entrega: {p.fechaEntrega}</li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     </div>
   );

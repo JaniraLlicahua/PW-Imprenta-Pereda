@@ -12,6 +12,8 @@ import Inventory from "./pages/Inventory";
 import OrderTracking from "./pages/OrderTracking";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ClienteLayout from "./components/ClienteLayout";
+import ClienteQuotes from "./pages/ClienteQuotes";  
 
 function App() {
   return (
@@ -19,15 +21,20 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/admin"element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/admin/inventario" element={<Inventory />} />
-        <Route path="/seguimiento-pedido" element={<OrderTracking />} />
-        <Route path="/solicitar-pedido" element={<RequestOrder />} />
         <Route path="/servicios" element={<Services />} />
         <Route path="/cotizaciones" element={<Quotes />} />
         <Route path="/contacto" element={<Contact />} />
         <Route path="/iniciar-sesion" element={<Login />} />
         <Route path="/registrar" element={<Register />} />
+
+        {/* Área del cliente (nuevo) ✅ */}
+        <Route path="/cliente" element={<ClienteLayout />}>
+          <Route path="solicitar" element={<RequestOrder />} />
+          <Route path="seguimiento" element={<OrderTracking />} />
+          <Route path="cotizaciones" element={<ClienteQuotes />} />
+        </Route>
       </Routes>
       <Footer />
     </BrowserRouter>

@@ -9,22 +9,26 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long clienteId;
-
     private String descripcion;
     private String estado;
     private String fechaEntrega;
 
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")  // Esta es la clave foránea en la tabla
+    private Cliente cliente;
+
+    // Constructor vacío
     public Pedido() {}
 
-    public Pedido(String descripcion, String estado, String fechaEntrega, Long clienteId) {
+    // Constructor con parámetros (puedes agregar si lo necesitas)
+    public Pedido(String descripcion, String estado, String fechaEntrega, Cliente cliente) {
         this.descripcion = descripcion;
         this.estado = estado;
         this.fechaEntrega = fechaEntrega;
-        this.clienteId = clienteId;
+        this.cliente = cliente;
     }
 
-    // Getters y setters
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -52,11 +56,12 @@ public class Pedido {
     public void setFechaEntrega(String fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
     }
-    public Long getClienteId() {
-        return clienteId;
+
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

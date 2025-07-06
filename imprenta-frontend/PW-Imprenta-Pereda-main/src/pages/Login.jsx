@@ -15,27 +15,32 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8081/api/login", {
+      const response = await fetch("http://localhost:8081/api/clientes/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ correo, contraseña: contraseña })
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ correo, contraseña })
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        alert("❌ " + errorText);
+        const errorMsg = await response.text();
+        alert("❌ " + errorMsg);
         return;
       }
 
       const data = await response.json();
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("rol", data.rol);
-      localStorage.setItem("clienteId", data.clienteId); // lo usamos para pedidos
+      alert("✅ Inicio de sesión exitoso");
 
+      // 🔐 Guardar sesión
+      localStorage.setItem("rol", data.rol);
+      localStorage.setItem("clienteId", data.clienteId);
+
+      // 🔀 Redirigir según rol
       if (data.rol === "admin") {
         navigate("/admin");
       } else {
-        navigate("/ordertracking");
+        navigate("/cliente/seguimiento");
       }
     } catch (error) {
       console.error(error);
