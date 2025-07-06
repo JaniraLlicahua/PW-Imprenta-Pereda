@@ -1,49 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const RequestOrder = () => {
   const [descripcion, setDescripcion] = useState("");
   const [fechaEntrega, setFechaEntrega] = useState("");
-  const [estado] = useState("Pendiente");  // Estado fijo, por ahora
   const [pedidos, setPedidos] = useState([]);
+  const clienteId = localStorage.getItem("clienteId");
+  const [cotizacionesAprobadas, setCotizacionesAprobadas] = useState([]);
+
+  useEffect(() => {
+    fetch(`http://localhost:8081/api/cotizaciones/cliente/${clienteId}/aprobadas`)
+      .then(res => res.json())
+      .then(data => setCotizacionesAprobadas(data))
+      .catch(err => console.error("Error al cargar cotizaciones aprobadas:", err));
+  }, [clienteId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const clienteId = localStorage.getItem("clienteId");
-    if (!clienteId) {
-      alert("Debes iniciar sesión para registrar un pedido.");
-      return;
-    }
-
     if (!descripcion || !fechaEntrega) {
-      alert("Por favor completa todos los campos.");
+      alert("Completa todos los campos");
       return;
     }
 
     const pedido = {
-      descripcion, estado, fechaEntrega, cliente: { id: Number(clienteId) }  // Envía el cliente correctamente
+      descripcion,
+      estado: "Pendiente",
+      fechaEntrega,
+      cliente: { id: Number(clienteId) }
     };
 
     try {
       const response = await fetch("http://localhost:8081/api/pedidos", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(pedido)
       });
 
-      if (!response.ok) throw new Error("Error al registrar el pedido");
+      if (!response.ok) throw new Error("Error al registrar pedido");
 
       const data = await response.json();
-
       setPedidos([...pedidos, data]);
-      setDescripcion("");
-      setFechaEntrega("");
-      alert("✅ Pedido registrado con éxito");
-
+      setDescripcion(""); setFechaEntrega("");
+      alert("✅ Pedido registrado");
     } catch (error) {
-      console.error(error);
       alert("❌ No se pudo registrar el pedido");
     }
   };
@@ -55,18 +54,24 @@ const RequestOrder = () => {
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block mb-1 text-sm font-medium">Descripción del pedido</label>
-            <input
-              type="text"
+            <label>Cotización aprobada</label>
+            <select
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
               className="w-full border border-gray-300 p-2 rounded"
               required
-            />
+            >
+              <option value="">Selecciona una cotización</option>
+              {cotizacionesAprobadas.map((c) => (
+                <option key={c.id} value={c.descripcion}>
+                  {c.descripcion} – S/ {c.precioEstimado.toFixed(2)}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium">Fecha de entrega</label>
+            <label>Fecha de entrega</label>
             <input
               type="date"
               value={fechaEntrega}
@@ -76,11 +81,8 @@ const RequestOrder = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-          >
-            Enviar pedido
+          <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+            Enviar Pedido
           </button>
         </form>
       </div>

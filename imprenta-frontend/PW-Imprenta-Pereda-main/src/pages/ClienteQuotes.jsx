@@ -11,10 +11,9 @@ const ClienteQuotes = () => {
       fetch(`http://localhost:8081/api/cotizaciones/cliente/${clienteId}`)
         .then((res) => res.json())
         .then((data) => {
-          // Mapeo para que React use precioEstimado sin importar el backend
-          const mapped = data.map(c => ({
+          const mapped = data.map((c) => ({
             ...c,
-            precioEstimado: c.precioEstimado ?? c.precio_estimado ?? 0
+            precioEstimado: c.precioEstimado ?? c.precio_estimado ?? 0,
           }));
           setCotizaciones(mapped);
         })
@@ -24,13 +23,8 @@ const ClienteQuotes = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!descripcion || !precioEstimado) {
-      alert("Por favor completa todos los campos.");
-      return;
-    }
-
-    console.log("Enviando datos:", { clienteId, descripcion, precioEstimado });
+    if (!descripcion || !precioEstimado) 
+      return alert("Completa los campos");
 
     try {
       const response = await fetch("http://localhost:8081/api/cotizaciones", {
@@ -45,20 +39,33 @@ const ClienteQuotes = () => {
 
       if (!response.ok) throw new Error("Error al registrar cotización");
 
-      const data = await response.json();
-      setCotizaciones([
-        ...cotizaciones,
-        {
-          ...data,
-          precioEstimado: data.precioEstimado ?? data.precio_estimado ?? 0
-        }
-      ]);
-      setDescripcion("");
-      setPrecioEstimado("");
-      alert("✅ Cotización registrada con éxito");
+      const nueva = await response.json();
+      setCotizaciones([...cotizaciones, nueva]);
+      setDescripcion(""); setPrecioEstimado("");
+      alert("✅ Cotización registrada");
+    } catch (error) {
+      alert("❌ Error al guardar cotización");
+    }
+  };
+
+  const generarPedido = async (cotizacion) => {
+    try {
+      const response = await fetch("http://localhost:8081/api/pedidos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          descripcion: cotizacion.descripcion,
+          estado: "Pendiente",
+          fechaEntrega: "", // puedes pedir al usuario que la seleccione si quieres
+          cliente: { id: clienteId }
+        })
+      });
+
+      if (!response.ok) throw new Error("Error al generar pedido");
+      alert("✅ Pedido generado exitosamente");
     } catch (error) {
       console.error(error);
-      alert("❌ No se pudo registrar la cotización");
+      alert("❌ No se pudo generar el pedido");
     }
   };
 
@@ -69,28 +76,13 @@ const ClienteQuotes = () => {
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
           <label>Descripción:</label>
-          <input
-            type="text"
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
-            className="border p-2 w-full rounded"
-          />
+          <input type="text" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} className="border p-2 w-full rounded" />
         </div>
         <div>
           <label>Precio estimado:</label>
-          <input
-            type="number"
-            value={precioEstimado}
-            onChange={(e) => setPrecioEstimado(e.target.value)}
-            className="border p-2 w-full rounded"
-          />
+          <input type="number" value={precioEstimado} onChange={(e) => setPrecioEstimado(e.target.value)} className="border p-2 w-full rounded" />
         </div>
-        <button
-          type="submit"
-          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-        >
-          Registrar Cotización
-        </button>
+        <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700" > Registrar Cotización </button>
       </form>
 
       {cotizaciones.length === 0 ? (
@@ -98,8 +90,19 @@ const ClienteQuotes = () => {
       ) : (
         <ul className="space-y-2">
           {cotizaciones.map((c) => (
-            <li key={c.id} className="bg-gray-100 p-2 rounded">
-              <strong>{c.descripcion}</strong> - S/ {c.precioEstimado.toFixed(2)}
+            <li key={c.id} className="bg-gray-100 p-2 rounded flex justify-between items-center">
+              <div>
+                <strong>{c.descripcion}</strong> - S/
+                {c.precioEstimado.toFixed(2)} - Estado: {c.estado}
+              </div>
+              {c.estado.toLowerCase() === "aprobada" && (
+                <a
+                  href={`/cliente/solicitar?cotizacionId=${c.id}`}
+                  className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                >
+                  Generar Pedido
+                </a>
+              )}
             </li>
           ))}
         </ul>

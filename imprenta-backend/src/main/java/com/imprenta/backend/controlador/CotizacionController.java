@@ -5,6 +5,7 @@ import com.imprenta.backend.modelo.Cotizacion;
 import com.imprenta.backend.repositorio.ClienteRepository;
 import com.imprenta.backend.repositorio.CotizacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,14 +41,48 @@ public class CotizacionController {
     }
 
     // Obtener cotizaciones por cliente
-    @GetMapping("/cliente/{clienteId}")
-    public List<Cotizacion> obtenerPorCliente(@PathVariable Long clienteId) {
-        return cotizacionRepository.findByCliente_Id(clienteId);
+    @GetMapping("/cliente/{clienteId}/aprobadas")
+    public List<Cotizacion> obtenerAprobadas(@PathVariable Long clienteId) {
+        return cotizacionRepository.findByCliente_IdAndEstado(clienteId, "Aprobada");
     }
 
     // Listar todas las cotizaciones (opcional)
     @GetMapping
     public List<Cotizacion> listarTodas() {
         return cotizacionRepository.findAll();
+    }
+
+    // Obtener cotizaciones por cliente
+    @GetMapping("/cliente/{clienteId}")
+    public List<Cotizacion> obtenerPorCliente(@PathVariable Long clienteId) {
+        return cotizacionRepository.findByCliente_Id(clienteId);
+    }
+
+    // Actualizar una cotización
+    @PutMapping("/{id}/aprobar")
+    public ResponseEntity<?> aprobarCotizacion(@PathVariable Long id) {
+        Cotizacion cot = cotizacionRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Cotización no encontrada"));
+
+        cot.setEstado("Aprobada");
+        cotizacionRepository.save(cot);
+
+        return ResponseEntity.ok("Cotización aprobada");
+    }
+
+    // Rechazar una cotización
+    @PutMapping("/{id}/rechazar")
+    public Cotizacion rechazarCotizacion(@PathVariable Long id) {
+        Cotizacion cotizacion = cotizacionRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Cotización no encontrada"));
+        cotizacion.setEstado("Rechazada");
+        return cotizacionRepository.save(cotizacion);
+    }
+
+    // Eliminar una cotización
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        cotizacionRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -3,7 +3,7 @@ import Logo from "../images/cropped-logopereda.png";
 
 const Navbar = () => {
   return (
-    <div className="text-white bg-[var(--blue-second)]">
+    <div className="text-white bg-[var(--blue-main)]">
       <div className="w-5/6 m-auto flex items-center justify-between py-3">
         <Link to="/">
           <img src={Logo} alt="Imprenta Pereda" className="w-full" />

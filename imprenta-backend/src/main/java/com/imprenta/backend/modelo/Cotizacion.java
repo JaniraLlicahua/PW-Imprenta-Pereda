@@ -21,6 +21,9 @@ public class Cotizacion {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cotizaciones"})
     private Cliente cliente;
 
+    @Column(nullable = false)
+    private String estado = "Pendiente"; // valores: "Pendiente", "Aprobada", "Rechazada"
+
     public Cotizacion() {}
 
     public Cotizacion(String descripcion, double precioEstimado, Cliente cliente) {
@@ -55,5 +58,13 @@ public class Cotizacion {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }
