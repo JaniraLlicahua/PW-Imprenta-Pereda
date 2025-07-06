@@ -27,7 +27,7 @@ function App() {
         <Route path="/cotizaciones" element={<Quotes />} />
         <Route path="/contacto" element={<Contact />} />
         <Route path="/iniciar-sesion" element={<Login />} />
-        <Route path="/registrar" element={<Register />} />
+        <Route path="/registrarse" element={<Register />} />
 
         {/* Área del cliente (nuevo) ✅ */}
         <Route path="/cliente" element={<ClienteLayout />}>

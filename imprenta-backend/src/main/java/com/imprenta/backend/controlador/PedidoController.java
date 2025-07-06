@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/pedidos")
@@ -32,7 +32,7 @@ public class PedidoController {
     }
 
     @GetMapping("/cliente/{clienteId}")
-    public List<Pedido> obtenerPorCliente(@PathVariable Long clienteId) {
+    public List<Pedido> obtenerPorCliente(@PathVariable("clienteId") Long clienteId) {
         return pedidoRepository.findByCliente_Id(clienteId);
     }
 
