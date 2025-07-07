@@ -12,9 +12,11 @@ public class Pedido {
     private String descripcion;
     private String estado;
     private String fechaEntrega;
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean activo = true;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id")  // Esta es la clave foránea en la tabla
+    @JoinColumn(name = "cliente_id") 
     private Cliente cliente;
 
     // Constructor vacío
@@ -26,6 +28,7 @@ public class Pedido {
         this.estado = estado;
         this.fechaEntrega = fechaEntrega;
         this.cliente = cliente;
+        this.activo = true;
     }
 
     // Getters y Setters
@@ -63,5 +66,13 @@ public class Pedido {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 }

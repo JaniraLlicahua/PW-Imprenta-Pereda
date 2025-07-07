@@ -15,9 +15,15 @@ const Dashboard = () => {
   useEffect(() => {
     // Obtener pedidos
     fetch("http://localhost:8081/api/pedidos")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then((data) => setPedidos(data))
-      .catch((err) => console.error("Error cargando pedidos:", err));
+      .catch((err) => {
+        console.error("Error cargando pedidos:", err.message);
+        alert("❌ Error cargando pedidos");
+      });
 
     // Obtener productos con stock bajo
     fetch("http://localhost:8081/api/productos/stock-bajo")
@@ -31,7 +37,7 @@ const Dashboard = () => {
       {/* Main dashboard */}
       <main className="flex-1 bg-gray-50 p-6">
         <h1 className="text-2xl font-bold text-[var(--blue-main)] mb-6">
-          Dashboard
+          Pedidos
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -66,7 +72,7 @@ const Dashboard = () => {
               .slice(0, 4)
               .map((pedido) => (
                 <li key={pedido.id} className="bg-gray-100 p-2 rounded">
-                  Pedido #{pedido.id} – {pedido.descripcion}
+                  Pedido #{pedido.id} – {pedido.descripcion} – Estado: {pedido.estado}
                 </li>
               ))}
           </ul>

@@ -16,6 +16,19 @@ public class Cotizacion {
     @Column(name = "precio_estimado")
     private double precioEstimado;
 
+    @Column(name = "tipo")
+    private String tipo; // producto o servicio
+
+    @Column(name = "cantidad", nullable = false)
+    private int cantidad;
+
+    @Lob
+    @Column(name = "archivo")
+    private byte[] archivo;
+
+    @Column(name = "nombre_archivo")
+    private String nombreArchivo;
+
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cotizaciones"})
@@ -24,12 +37,16 @@ public class Cotizacion {
     @Column(nullable = false)
     private String estado = "Pendiente"; // valores: "Pendiente", "Aprobada", "Rechazada"
 
+    @Column(name = "comentario_rechazo")
+    private String comentarioRechazo;
+
     public Cotizacion() {}
 
-    public Cotizacion(String descripcion, double precioEstimado, Cliente cliente) {
+    public Cotizacion(String descripcion, double precioEstimado, Cliente cliente, String estado) {
         this.descripcion = descripcion;
         this.precioEstimado = precioEstimado;
         this.cliente = cliente;
+        this.estado = estado;
     }
 
     public Long getId() {
@@ -66,5 +83,45 @@ public class Cotizacion {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getComentarioRechazo() {
+        return comentarioRechazo;
+    }
+
+    public void setComentarioRechazo(String comentarioRechazo) {
+        this.comentarioRechazo = comentarioRechazo;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public byte[] getArchivo() {
+        return archivo;
+    }
+
+    public void setArchivo(byte[] archivo) {
+        this.archivo = archivo;
+    }
+
+    public String getNombreArchivo() {
+        return nombreArchivo;
+    }
+
+    public void setNombreArchivo(String nombreArchivo) {
+        this.nombreArchivo = nombreArchivo;
     }
 }

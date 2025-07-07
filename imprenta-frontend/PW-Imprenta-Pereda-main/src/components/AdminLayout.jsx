@@ -18,11 +18,16 @@ const AdminLayout = () => {
           <Link to="/admin" className="flex items-center gap-2">
             <FaClipboardList /> <span>Pedidos</span>
           </Link>
+          <Link to="/admin/pedidos" className="flex items-center gap-2">
+            <FaClipboardList /> <span>Gestión de Pedidos</span>
+          </Link>
           <Link to="/admin/cotizaciones" className="flex items-center gap-2">
             <FaFileInvoice /> <span>Cotizaciones</span>
           </Link>
           <div className="flex items-center gap-2">
-            <FaUsers /> <span>Clientes</span>
+            <Link to="/admin/clientes" className="flex items-center gap-2">
+              <FaUsers /> <span>Clientes</span>
+            </Link>
           </div>
           <Link to="/admin/inventario" className="flex items-center gap-2">
             <FaBoxes /> <span>Inventario</span>

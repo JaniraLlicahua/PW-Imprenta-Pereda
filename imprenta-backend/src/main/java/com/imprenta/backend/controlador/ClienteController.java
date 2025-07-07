@@ -39,19 +39,18 @@ public class ClienteController {
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // Editar cliente
+    // Actualizar cliente
     @PutMapping("/{id}")
-    public ResponseEntity<?> editarCliente(@PathVariable Long id, @RequestBody Cliente clienteEditado) {
+    public ResponseEntity<?> actualizarCliente(@PathVariable Long id, @RequestBody Cliente clienteActualizado) {
         Cliente cliente = clienteRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
-        cliente.setNombre(clienteEditado.getNombre());
-        cliente.setApellido(clienteEditado.getApellido());
-        cliente.setCorreo(clienteEditado.getCorreo());
-        cliente.setDireccion(clienteEditado.getDireccion());
-        cliente.setDniRuc(clienteEditado.getDniRuc());
-        cliente.setTelefono(clienteEditado.getTelefono());
-        cliente.setRol(clienteEditado.getRol());
+        cliente.setNombre(clienteActualizado.getNombre());
+        cliente.setApellido(clienteActualizado.getApellido());
+        cliente.setCorreo(clienteActualizado.getCorreo());
+        cliente.setDireccion(clienteActualizado.getDireccion());
+        cliente.setTelefono(clienteActualizado.getTelefono());
+        cliente.setDniRuc(clienteActualizado.getDniRuc());
 
         clienteRepository.save(cliente);
         return ResponseEntity.ok("Cliente actualizado");

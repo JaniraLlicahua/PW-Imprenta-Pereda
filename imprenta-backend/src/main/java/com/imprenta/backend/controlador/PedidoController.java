@@ -54,8 +54,42 @@ public class PedidoController {
     }
 
     // Lista todos los pedidos
+    @GetMapping("/todos")
+    public List<Pedido> obtenerTodosPedidos() {
+        return pedidoRepository.findAll(); // sin filtro por activo
+    }
+
+    // Obtener un pedido por ID
     @GetMapping
     public List<Pedido> listarPedidos() {
         return pedidoRepository.findAll();
+    }
+
+    // Editar estado del pedido
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<?> actualizarEstado(@PathVariable Long id, @RequestBody String nuevoEstado) {
+        Pedido pedido = pedidoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+
+        pedido.setEstado(nuevoEstado.replace("\"", "")); // elimina comillas dobles
+        pedidoRepository.save(pedido);
+        return ResponseEntity.ok("Estado actualizado correctamente");
+    }
+
+    // Filtrar pedidos por fecha
+    @GetMapping("/filtrar")
+    public List<Pedido> filtrarPorFecha(@RequestParam String fecha) {
+        return pedidoRepository.findByFechaEntregaAndActivoTrue(fecha);  // ✅ Este sí existe
+    }
+
+    // Eliminar pedido (soft delete)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarPedido(@PathVariable Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+
+        pedido.setActivo(false);
+        pedidoRepository.save(pedido);
+        return ResponseEntity.ok("Pedido desactivado (soft delete)");
     }
 }

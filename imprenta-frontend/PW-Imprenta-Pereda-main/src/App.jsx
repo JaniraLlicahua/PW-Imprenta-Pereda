@@ -13,6 +13,8 @@ import OrderTracking from "./pages/OrderTracking";
 import Dashboard from "./pages/Dashboard";
 import ClienteQuotes from "./pages/ClienteQuotes";
 import AdminQuotes from "./pages/AdminQuotes";
+import AdminClients from "./pages/AdminClients";
+import AdminOrder from "./pages/AdminOrder";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ClienteLayout from "./components/ClienteLayout";
 import AdminLayout from "./components/AdminLayout";
@@ -41,6 +43,8 @@ function App() {
           <Route index element={<Dashboard/>} />
           <Route path="cotizaciones" element={<AdminQuotes/>} />
           <Route path="inventario" element={<Inventory/>} />
+          <Route path="clientes" element={<AdminClients/>} />
+          <Route path="pedidos" element={<AdminOrder/>} />
           {/* Aquí puedes agregar más rutas admin como cotizaciones, clientes, etc */}
         </Route>
       </Routes>

@@ -40,6 +40,30 @@ const AdminQuotes = () => {
     }
   };
 
+  const rechazarCotizacion = async (id) => {
+    const comentario = prompt("Ingrese el motivo del rechazo:");
+    if (!comentario) return;
+
+    try {
+      const response = await fetch(`http://localhost:8081/api/cotizaciones/${id}/rechazar`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comentario }),
+      });
+
+      if (!response.ok) throw new Error("Error al rechazar cotización");
+
+      // Actualiza la UI
+      setCotizaciones((prev) =>
+        prev.map((c) => c.id === id ? { ...c, estado: "Rechazada", comentarioRechazo: comentario } : c)
+      );
+      alert("❌ Cotización rechazada con comentario");
+    } catch (error) {
+      alert("Error al rechazar cotización");
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4 text-[var(--blue-main)]">Cotizaciones Registradas</h1>
@@ -55,6 +79,7 @@ const AdminQuotes = () => {
               <th className="p-2 border">Descripción</th>
               <th className="p-2 border">Precio</th>
               <th className="p-2 border">Estado</th>
+              <th className="p-2 border">Archivo</th>
               <th className="p-2 border">Acciones</th>
             </tr>
           </thead>
@@ -66,6 +91,32 @@ const AdminQuotes = () => {
                 <td className="p-2 border">{c.descripcion}</td>
                 <td className="p-2 border">S/ {c.precioEstimado.toFixed(2)}</td>
                 <td className="p-2 border">{c.estado}</td>
+                <td className="p-2 border">
+                  {c.nombreArchivo ? (
+                    <div className="space-y-1 text-center">
+                      {c.nombreArchivo.endsWith(".jpg") || c.nombreArchivo.endsWith(".png") ? (
+                        <img
+                          src={`http://localhost:8081/api/cotizaciones/archivo/${c.id}`}
+                          alt="archivo"
+                          className="w-20 h-auto rounded shadow border mx-auto"
+                        />
+                      ) : (
+                        <span className="text-sm text-gray-700">{c.nombreArchivo}</span>
+                      )}
+                      <a
+                        href={`http://localhost:8081/api/cotizaciones/archivo/${c.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download={c.nombreArchivo}
+                        className="block mt-1 text-blue-600 text-sm underline hover:text-blue-800"
+                      >
+                        Descargar
+                      </a>
+                    </div>
+                  ) : (
+                    <span className="text-gray-400 text-sm">Sin archivo</span>
+                  )}
+                </td>
                 <td className="p-2 border space-x-2">
                   {c.estado === "Pendiente" ? (
                     <>
@@ -81,9 +132,17 @@ const AdminQuotes = () => {
                       >
                         Eliminar
                       </button>
+                      <button
+                        onClick={() => rechazarCotizacion(c.id)}
+                        className="bg-yellow-600 text-white px-3 py-1 rounded hover:bg-yellow-700"
+                      >
+                        Rechazar
+                      </button>
                     </>
                   ) : (
-                    <span className="text-green-700 font-semibold">Aprobado</span>
+                    <span className={`font-semibold ${c.estado === "Aprobada" ? "text-green-700" : "text-red-700"}`}>
+                      {c.estado}
+                    </span>
                   )}
                 </td>
               </tr>
@@ -96,3 +155,4 @@ const AdminQuotes = () => {
 };
 
 export default AdminQuotes;
+
