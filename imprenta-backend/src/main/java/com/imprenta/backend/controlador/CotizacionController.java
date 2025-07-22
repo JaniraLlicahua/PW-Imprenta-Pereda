@@ -2,6 +2,7 @@ package com.imprenta.backend.controlador;
 
 import com.imprenta.backend.modelo.Cliente;
 import com.imprenta.backend.modelo.Cotizacion;
+import com.imprenta.backend.modelo.CotizacionDTO;
 import com.imprenta.backend.repositorio.ClienteRepository;
 import com.imprenta.backend.repositorio.CotizacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/cotizaciones")
-@CrossOrigin(origins = "*")
 public class CotizacionController {
 
     @Autowired
@@ -56,10 +57,28 @@ public class CotizacionController {
         return ResponseEntity.ok(cot);
     }
 
-    // Obtener cotizaciones por cliente
-    @GetMapping("/cliente/{clienteId}/aprobadas")
-    public List<Cotizacion> obtenerAprobadas(@PathVariable Long clienteId) {
-        return cotizacionRepository.findByCliente_IdAndEstado(clienteId, "Aprobada");
+    
+    @GetMapping("/cliente/{cliente_Id}/aprobadas")
+    public ResponseEntity<List<CotizacionDTO>> getCotizacionesAprobadas(@PathVariable Long cliente_Id) {
+        try {
+            List<Cotizacion> cotizaciones = cotizacionRepository.findByClienteIdAndEstado(cliente_Id, "Aprobada");
+
+            List<CotizacionDTO> resultado = cotizaciones.stream()
+                .map(c -> new CotizacionDTO(
+                    c.getId(),
+                    c.getDescripcion(),
+                    c.getPrecioEstimado(),
+                    c.getTipo(),
+                    c.getCantidad(),
+                    c.getEstado()
+                ))
+                .toList();
+
+            return ResponseEntity.ok(resultado);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // Listar todas las cotizaciones (opcional)
@@ -69,9 +88,10 @@ public class CotizacionController {
     }
 
     // Obtener cotizaciones por cliente
-    @GetMapping("/cliente/{clienteId}")
-    public List<Cotizacion> obtenerPorCliente(@PathVariable Long clienteId) {
-        return cotizacionRepository.findByCliente_Id(clienteId);
+    @GetMapping("/cliente/{cliente_Id}")
+    public List<Cotizacion> obtenerCotizacionesPorCliente(@PathVariable Long cliente_Id) {
+        System.out.println("🔍 Buscando cotizaciones para cliente: " + cliente_Id);
+        return cotizacionRepository.findByClienteId(cliente_Id);
     }
 
     // Obtener cotizaciones pendientes

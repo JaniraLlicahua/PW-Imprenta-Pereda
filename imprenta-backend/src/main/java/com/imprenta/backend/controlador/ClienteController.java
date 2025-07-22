@@ -3,6 +3,7 @@
 package com.imprenta.backend.controlador;
 
 import com.imprenta.backend.modelo.Cliente;
+import com.imprenta.backend.modelo.LoginRequest;
 import com.imprenta.backend.repositorio.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,7 +74,7 @@ public class ClienteController {
 
         // POST → /api/clientes/login (comparar con contraseña encriptada)
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Cliente loginData) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginData) {
         List<Cliente> resultados = clienteRepository.findByCorreo(loginData.getCorreo());
 
         if (!resultados.isEmpty()) {
@@ -91,5 +92,4 @@ public class ClienteController {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña incorrectos");
     }
-
 }

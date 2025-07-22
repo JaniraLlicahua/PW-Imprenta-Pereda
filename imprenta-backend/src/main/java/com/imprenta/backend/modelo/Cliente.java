@@ -1,8 +1,12 @@
 package com.imprenta.backend.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "cliente")
 public class Cliente {
 
@@ -10,19 +14,20 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long clienteId;
+    //private Long cliente_Id;
     private String nombre;
     private String apellido;
     private String dniRuc;       // 🆕 Documento nacional o RUC
     private String telefono;
     private String direccion;    // 🆕 Dirección física
     private String correo;
+    @JsonIgnore
     private String contraseña;
     private String rol = "cliente";
 
     public Cliente() {}
 
-    public Cliente(String nombre, String apellido, String dniRuc, String telefono, String direccion, String correo, String contraseña, String rol, Long clienteId, Long id) {
+    public Cliente(String nombre, String apellido, String dniRuc, String telefono, String direccion, String correo, String contraseña, String rol, Long cliente_Id, Long id) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dniRuc = dniRuc;
@@ -31,7 +36,7 @@ public class Cliente {
         this.correo = correo;
         this.contraseña = contraseña;
         this.rol = rol;
-        this.clienteId = clienteId;
+        //this.cliente_Id = cliente_Id;
         this.id = id;
     }
 
@@ -41,12 +46,12 @@ public class Cliente {
     public void setId(Long id) {
         this.id = id;
     }
-    public Long getClienteId() {
-        return clienteId;
-    }
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
-    }
+    //public Long getClienteId() {
+    //    return cliente_Id;
+    //}
+    //public void setClienteId(Long cliente_Id) {
+    //    this.cliente_Id = cliente_Id;
+    //}
     public String getNombre() {
         return nombre;
     }

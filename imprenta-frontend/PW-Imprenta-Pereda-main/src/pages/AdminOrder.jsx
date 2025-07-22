@@ -5,13 +5,20 @@ const steps = ["Recibido", "En proceso", "Enviado", "Entregado"];
 
 const AdminOrder = () => {
   const [pedidos, setPedidos] = useState([]);
+  const [verHistorial, setVerHistorial] = useState(false);
   const [fechaFiltro, setFechaFiltro] = useState("");
 
   const cargarPedidos = async () => {
     try {
-      const url = fechaFiltro
-        ? `http://localhost:8081/api/pedidos/filtrar?fecha=${fechaFiltro}`
-        : "http://localhost:8081/api/pedidos";
+      let url = "";
+
+      if (verHistorial) {
+        url = "http://localhost:8081/api/pedidos/inactivos";
+      } else if (fechaFiltro) {
+        url = `http://localhost:8081/api/pedidos/filtrar?fecha=${fechaFiltro}`;
+      } else {
+        url = "http://localhost:8081/api/pedidos";
+      }
 
       const res = await fetch(url);
       const data = await res.json();
@@ -30,7 +37,7 @@ const AdminOrder = () => {
       const res = await fetch(`http://localhost:8081/api/pedidos/${id}/estado`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nuevoEstado),
+        body: JSON.stringify(nuevoEstado), // texto plano con comillas
       });
       if (!res.ok) throw new Error();
       alert("✅ Estado actualizado");
@@ -51,6 +58,21 @@ const AdminOrder = () => {
     }
   };
 
+  const actualizarEtapaFinal = async (id, nuevaEtapa) => {
+    try {
+      const res = await fetch(`http://localhost:8081/api/pedidos/${id}/etapa-final`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nuevaEtapa)
+      });
+      if (!res.ok) throw new Error("Error al actualizar etapa final");
+      alert("✅ Etapa final actualizada");
+      cargarPedidos();
+    } catch (error) {
+      alert("❌ No se pudo actualizar etapa final");
+    }
+  };
+
   return (
     <div className="bg-white min-h-screen p-8">
       <h2 className="text-4xl font-bold text-gray-800 mb-10 text-center">
@@ -65,6 +87,15 @@ const AdminOrder = () => {
           onChange={(e) => setFechaFiltro(e.target.value)}
           className="border p-2 rounded"
         />
+        <button
+          onClick={() => {
+            setVerHistorial(!verHistorial);
+            setFechaFiltro("");
+          }}
+          className="bg-orange-600 text-white px-4 py-1 rounded hover:bg-orange-700"
+        >
+          {verHistorial ? "Ver pedidos activos" : "Ver historial (eliminados)"}
+        </button>
         <button
           onClick={() => setFechaFiltro("")}
           className="bg-gray-300 px-3 py-1 rounded hover:bg-gray-400"
@@ -131,12 +162,29 @@ const AdminOrder = () => {
               <div className="mt-4">
                 <label className="font-medium mr-2">Cambiar estado:</label>
                 <select
+                  value={pedido.etapaFinal || ""}
+                  onChange={(e) => actualizarEtapaFinal(pedido.id, e.target.value)}
+                  className="border p-1 rounded"
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="Control de calidad">Control de calidad</option>
+                  <option value="Acabado">Acabado</option>
+                  <option value="Empaquetado">Empaquetado</option>
+                  <option value="Listo para entrega">Listo para entrega</option>
+                </select>
+              </div>
+              
+              <div className="mt-4">
+                <label className="font-medium mr-2">Actualizar estado:</label>
+                <select
                   value={pedido.estado}
                   onChange={(e) => actualizarEstado(pedido.id, e.target.value)}
                   className="border p-1 rounded"
                 >
-                  {steps.map((estado) => (
-                    <option key={estado} value={estado}>{estado}</option>
+                  {steps.map((step) => (
+                    <option key={step} value={step}>
+                      {step}
+                    </option>
                   ))}
                 </select>
               </div>

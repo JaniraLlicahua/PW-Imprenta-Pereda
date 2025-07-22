@@ -23,15 +23,16 @@ public class Cotizacion {
     private int cantidad;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "archivo")
     private byte[] archivo;
 
     @Column(name = "nombre_archivo")
     private String nombreArchivo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cotizaciones"})
+    @JsonIgnoreProperties(value = { "contraseña", "direccion", "telefono", "rol" }, allowGetters = true)
     private Cliente cliente;
 
     @Column(nullable = false)

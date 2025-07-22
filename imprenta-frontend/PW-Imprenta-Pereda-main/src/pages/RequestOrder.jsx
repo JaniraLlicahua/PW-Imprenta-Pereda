@@ -9,9 +9,18 @@ const RequestOrder = () => {
 
   useEffect(() => {
     fetch(`http://localhost:8081/api/cotizaciones/cliente/${clienteId}/aprobadas`)
-      .then(res => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(errorText || `HTTP ${res.status}`);
+        }
+        return res.json();
+      })
       .then(data => setCotizacionesAprobadas(data))
-      .catch(err => console.error("Error al cargar cotizaciones aprobadas:", err));
+      .catch(err => {
+        console.error("❌ Error al cargar cotizaciones aprobadas:", err.message);
+        alert("No se pudieron cargar las cotizaciones aprobadas.");
+      });
   }, [clienteId]);
 
   const handleSubmit = async (e) => {
@@ -64,7 +73,7 @@ const RequestOrder = () => {
               <option value="">Selecciona una cotización</option>
               {cotizacionesAprobadas.map((c) => (
                 <option key={c.id} value={c.descripcion}>
-                  {c.descripcion} – S/ {c.precioEstimado.toFixed(2)}
+                  {c.descripcion} – S/ {c.precioEstimado?.toFixed(2)}
                 </option>
               ))}
             </select>

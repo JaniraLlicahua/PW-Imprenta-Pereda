@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import CotizacionModal from "./CotizacionModal";
+
 
 const ClienteQuotes = () => {
   const [cotizaciones, setCotizaciones] = useState([]);
@@ -7,10 +9,12 @@ const ClienteQuotes = () => {
   const [cantidad, setCantidad] = useState("");
   const [archivo, setArchivo] = useState(null);
   const [editando, setEditando] = useState(null);
+  const [mostrarModal, setMostrarModal] = useState(false);
 
   const clienteId = localStorage.getItem("clienteId");
 
   useEffect(() => {
+    console.log("📦 clienteId desde localStorage:", clienteId);
     if (clienteId) {
       fetch(`http://localhost:8081/api/cotizaciones/cliente/${clienteId}`)
         .then((res) => res.json())
@@ -131,11 +135,10 @@ const ClienteQuotes = () => {
                       ) : (
                         <a
                           href={`http://localhost:8081/api/cotizaciones/archivo/${cot.id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          download
                           className="text-blue-600 underline text-xs block mt-1"
                         >
-                          Ver archivo
+                          Descargar archivo
                         </a>
                       )
                     )}
@@ -146,68 +149,31 @@ const ClienteQuotes = () => {
           </table>
         )}
       </div>
-
-      {/* Formulario */}
-      <div className="mt-8 bg-white rounded-lg shadow-md p-6" id="formulario">
-        <h3 className="text-lg font-semibold mb-4">
-          {editando ? "Editar Cotización" : "Nueva Cotización"}
-        </h3>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block mb-1">Tipo</label>
-            <select
-              value={tipo}
-              onChange={(e) => setTipo(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
-              required
-            >
-              <option value="">Seleccione...</option>
-              <option value="Producto">Producto</option>
-              <option value="Servicio">Servicio</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block mb-1">Descripción</label>
-            <textarea
-              value={descripcion}
-              onChange={(e) => setDescripcion(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1">Cantidad</label>
-            <input
-              type="number"
-              value={cantidad}
-              onChange={(e) => setCantidad(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1">Archivo adjunto (opcional)</label>
-            <input
-              type="file"
-              accept="image/*,application/pdf"
-              onChange={(e) => setArchivo(e.target.files[0])}
-              className="block w-full"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className={`bg-${editando ? "yellow" : "blue"}-600 text-white py-2 px-4 rounded hover:bg-${editando ? "yellow" : "blue"}-700`}
-          >
-            {editando ? "Actualizar Cotización" : "Enviar Cotización"}
-          </button>
-        </form>
+      <div className="mt-6">
+        <button
+          onClick={() => {
+            setEditando(null);
+            setMostrarModal(true);
+          }}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Registrar nueva cotización
+        </button>
       </div>
-    </div>
+      {mostrarModal && (
+        <CotizacionModal
+          onClose={() => setMostrarModal(false)}
+          onSave={(nuevaCot) => {
+            const actualizadas = editando
+              ? cotizaciones.map((c) => (c.id === nuevaCot.id ? nuevaCot : c))
+              : [...cotizaciones, nuevaCot];
+            setCotizaciones(actualizadas);
+          }}
+          editando={editando}
+          clienteId={clienteId}
+        />
+      )}
+    </div>  
   );
 };
 

@@ -15,9 +15,13 @@ import ClienteQuotes from "./pages/ClienteQuotes";
 import AdminQuotes from "./pages/AdminQuotes";
 import AdminClients from "./pages/AdminClients";
 import AdminOrder from "./pages/AdminOrder";
+import ClienteCorrections from "./pages/ClienteCorreccionPedido";
+import ClienteFollow from "./pages/ClienteFollow";
+import AdminCorrections from "./pages/AdminCorrections";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ClienteLayout from "./components/ClienteLayout";
 import AdminLayout from "./components/AdminLayout";
+import ClientePedidos from "./pages/ClientePedidos";
 
 function App() {
   return (
@@ -35,7 +39,10 @@ function App() {
         <Route path="/cliente" element={<ClienteLayout/>}>
           <Route path="solicitar" element={<RequestOrder/>} />
           <Route path="seguimiento" element={<OrderTracking/>} />
+          <Route path="correcciones" element={<ClienteCorrections/>} />
           <Route path="cotizaciones" element={<ClienteQuotes/>} />
+          <Route path="seguimiento/:pedidoId" element={<ClienteFollow/>} />
+          <Route path="pedidos" element={<ClientePedidos/>} />
         </Route>
 
         {/* Admin */}
@@ -45,6 +52,7 @@ function App() {
           <Route path="inventario" element={<Inventory/>} />
           <Route path="clientes" element={<AdminClients/>} />
           <Route path="pedidos" element={<AdminOrder/>} />
+          <Route path="correcciones" element={<AdminCorrections/>} />
           {/* Aquí puedes agregar más rutas admin como cotizaciones, clientes, etc */}
         </Route>
       </Routes>

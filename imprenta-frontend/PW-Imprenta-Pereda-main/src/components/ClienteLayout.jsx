@@ -13,8 +13,14 @@ const ClienteLayout = () => {
           <Link to="/cliente/seguimiento" className="hover:underline block">
             Seguimiento Pedido
           </Link>
+          <Link to="/cliente/correcciones" className="hover:underline block">
+            Correcciones de Pedido
+          </Link>
           <Link to="/cliente/cotizaciones" className="hover:underline block">
             Mis Cotizaciones
+          </Link>
+          <Link to="/cliente/pedidos" className="text-orange-600 hover:underline">
+            Mis Pedidos
           </Link>
         </nav>
       </aside>

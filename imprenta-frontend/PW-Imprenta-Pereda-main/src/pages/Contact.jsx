@@ -35,21 +35,16 @@ const Contact = () => {
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15634.982320336536!2d-76.98026881058759!3d-11.570087767336684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91066fdcf3f71b79%3A0x1e7c27b698a00563!2sPortachuelo%2C%2015125!5e0!3m2!1ses!2spe!4v1749311376445!5m2!1ses!2spe"
             style={{ border: "0", borderRadius: "10px" }}
-            allowfullscreen=""
+            allowFullScreen
             loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="w-full h-64"
           ></iframe>
-          <div className=" space-y-2">
-            <p>
-              <strong>Dirección</strong>
-            </p>
-            <p>
-              <strong>Teléfono</strong>
-            </p>
-            <p>
-              <strong>Horarios de atención</strong>
-              <p>Lun–Vie: 9:00 a 18:00</p>
-            </p>
+          <div className="space-y-2 mt-4">
+            <p><strong>Dirección:</strong> Portachuelo, 15125</p>
+            <p><strong>Teléfono:</strong> +51 123 456 789</p>
+            <p><strong>Horarios de atención:</strong></p>
+            <p>Lun–Vie: 9:00 a 18:00</p>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 package com.imprenta.backend.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,21 +15,24 @@ public class Pedido {
     private String fechaEntrega;
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean activo = true;
+    private String etapaFinal; // Ejemplo: "Control de calidad", "Empaquetado", "Listo para entrega"
 
     @ManyToOne
     @JoinColumn(name = "cliente_id") 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Cliente cliente;
 
     // Constructor vacío
     public Pedido() {}
 
     // Constructor con parámetros (puedes agregar si lo necesitas)
-    public Pedido(String descripcion, String estado, String fechaEntrega, Cliente cliente) {
+    public Pedido(String descripcion, String estado, String fechaEntrega, Cliente cliente, boolean activo, String etapaFinal) {
         this.descripcion = descripcion;
         this.estado = estado;
         this.fechaEntrega = fechaEntrega;
         this.cliente = cliente;
         this.activo = true;
+        this.etapaFinal = etapaFinal;
     }
 
     // Getters y Setters
@@ -74,5 +78,13 @@ public class Pedido {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public String getEtapaFinal() {
+        return etapaFinal;
+    }
+
+    public void setEtapaFinal(String etapaFinal) {
+        this.etapaFinal = etapaFinal;
     }
 }

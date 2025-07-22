@@ -33,6 +33,7 @@ const Login = () => {
       alert("✅ Inicio de sesión exitoso");
 
       // 🔐 Guardar sesión
+      localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("rol", data.rol);
       localStorage.setItem("clienteId", data.clienteId);
 
